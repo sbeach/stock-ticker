@@ -41,7 +41,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -114,7 +113,7 @@ public class StockQuoteFragment extends Fragment {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.multi_select_contextual_menu, menu);
+                inflater.inflate(R.menu.menu_listview_contextual_menu, menu);
                 return true;
             }
 
@@ -168,7 +167,7 @@ public class StockQuoteFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.stock_quote_fragment, menu);
+        inflater.inflate(R.menu.menu_main_fragment, menu);
     }
 
     @Override
