@@ -2,10 +2,18 @@
     <string name="app_name">Stock Ticker</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add_stock">Add Stock</string>
+    <string name="action_share">Share</string>
+    <string name="dialog_add_stock_title">Add new stock</string>
+    <string name="dialog_add_stock_hint">Stock symbol</string>
     <string name="title_activity_detail">Stock Details</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 
     <string name="pref_mobile_data">Sync over mobile networks</string>
     <string name="pref_mobile_data_key">mobile_data</string>
+    <string name="pref_stocks_displayed_key">stocks_displayed</string>
 
 </resources>
