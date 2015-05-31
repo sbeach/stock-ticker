@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_stocks_displayed_default">
+        <item>GOOG</item>
+        <item>AAPL</item>
+        <item>MSFT</item>
+        <item>SNE</item>
+        <item>NTDOY</item>
+        <item>INTC</item>
+        <item>AMD</item>
+    </string-array>
+</resources>
