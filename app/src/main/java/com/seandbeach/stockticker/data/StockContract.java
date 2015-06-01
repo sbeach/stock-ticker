@@ -18,16 +18,6 @@ public class StockContract {
         return time.setJulianDay(julianDay);
     }
 
-    /*
-        Inner class that defines the table contents of the location table
-        Students: This is where you will add the strings.  (Similar to what has been
-        done for WeatherEntry)
-     */
-    public static final class SymbolEntry implements BaseColumns {
-        public static final String TABLE_NAME = "symbols";
-
-    }
-
     // Inner class that defines the table contents of the stock table
     public static final class StockEntry implements BaseColumns {
 
