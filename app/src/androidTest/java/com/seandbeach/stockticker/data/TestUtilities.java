@@ -1,8 +1,10 @@
 package com.seandbeach.stockticker.data;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -14,7 +16,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class TestUtilities extends AndroidTestCase {
-    static final String TEST_STOCK = "GOOG";
+    static final String TEST_SYMBOL = "GOOG";
+    static final String TEST_NAME = "Google Inc.";
+    static final double TEST_PRICE = 560.50;
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
@@ -38,9 +42,9 @@ public class TestUtilities extends AndroidTestCase {
     static ContentValues createGoogleStockValues() {
         // Create a new map of values, where column names are the keys
         ContentValues stockValues = new ContentValues();
-        stockValues.put(StockContract.StockEntry.COLUMN_SYMBOL, TEST_STOCK);
-        stockValues.put(StockContract.StockEntry.COLUMN_NAME, "Google Inc.");
-        stockValues.put(StockContract.StockEntry.COLUMN_LAST_TRADE_PRICE, 560.50);
+        stockValues.put(StockContract.StockEntry.COLUMN_SYMBOL, TEST_SYMBOL);
+        stockValues.put(StockContract.StockEntry.COLUMN_NAME, TEST_NAME);
+        stockValues.put(StockContract.StockEntry.COLUMN_LAST_TRADE_PRICE, TEST_PRICE);
         stockValues.put(StockContract.StockEntry.COLUMN_OPEN, 537.04);
         stockValues.put(StockContract.StockEntry.COLUMN_PREVIOUS_CLOSE, 539.78);
         stockValues.put(StockContract.StockEntry.COLUMN_CHANGE, -1.42);
@@ -55,6 +59,21 @@ public class TestUtilities extends AndroidTestCase {
         stockValues.put(StockContract.StockEntry.COLUMN_YEAR_HIGH_CHANGE_PERCENT, -11.02);
 
         return stockValues;
+    }
+
+    static long insertGoogleStockValues(Context context) {
+        // insert our test records into the database
+        StockDbHelper dbHelper = new StockDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues testValues = TestUtilities.createGoogleStockValues();
+
+        long locationRowId;
+        locationRowId = db.insert(StockContract.StockEntry.TABLE_NAME, null, testValues);
+
+        // Verify we got a row back.
+        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
+
+        return locationRowId;
     }
 
     static class TestContentObserver extends ContentObserver {

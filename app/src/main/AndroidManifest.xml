@@ -35,6 +35,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.seandbeach.stockticker"
+            android:exported="false"
+            android:name=".data.StockProvider" />
     </application>
 
 </manifest>
