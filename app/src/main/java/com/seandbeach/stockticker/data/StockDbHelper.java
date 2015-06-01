@@ -32,7 +32,7 @@ public class StockDbHelper extends SQLiteOpenHelper {
                 
                 + ", " + StockEntry.COLUMN_SYMBOL + " TEXT UNIQUE NOT NULL ON CONFLICT IGNORE"
 
-                + ", " + StockEntry.COLUMN_NAME + " TEXT"
+                + ", " + StockEntry.COLUMN_NAME + " TEXT NOT NULL"
                 + ", " + StockEntry.COLUMN_LAST_TRADE_PRICE + " REAL NOT NULL"
                 + ", " + StockEntry.COLUMN_OPEN + " REAL NOT NULL"
                 + ", " + StockEntry.COLUMN_PREVIOUS_CLOSE + " REAL NOT NULL"
