@@ -72,11 +72,11 @@ public class StockContract {
         }
 
         public static Uri buildStockWithSymbol(String symbol) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_SYMBOL, symbol).build();
+            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_SYMBOL, "\"" + symbol + "\"").build();
         }
 
         public static Uri buildStockWithName(String name) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_NAME, name).build();
+            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_NAME, "\"" + name + "\"").build();
         }
 
         public static Uri buildStockWithPrice(double price) {
