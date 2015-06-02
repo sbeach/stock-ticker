@@ -44,7 +44,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     private static final int STOCK_LOADER = 0;
     // For the main stock view we're showing only a small subset of the stored data.
     // Specify the columns we need.
-    private static final String[] STOCK_COLUMNS = {
+    static final String[] STOCK_COLUMNS = {
             StockContract.StockEntry._ID,
             StockContract.StockEntry.COLUMN_SYMBOL,
             StockContract.StockEntry.COLUMN_NAME,
