@@ -30,7 +30,7 @@ public class StockDbHelper extends SQLiteOpenHelper {
                 // should be sorted accordingly.
                 + StockEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT"
                 
-                + ", " + StockEntry.COLUMN_SYMBOL + " TEXT UNIQUE NOT NULL ON CONFLICT IGNORE"
+                + ", " + StockEntry.COLUMN_SYMBOL + " TEXT UNIQUE NOT NULL"
 
                 + ", " + StockEntry.COLUMN_NAME + " TEXT NOT NULL"
                 + ", " + StockEntry.COLUMN_LAST_TRADE_PRICE + " REAL NOT NULL"

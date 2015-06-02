@@ -182,7 +182,7 @@ public class StockProvider extends ContentProvider {
 
         switch (match) {
             case STOCK: {
-                long _id = db.insert(StockContract.StockEntry.TABLE_NAME, null, values);
+                long _id = db.insertWithOnConflict(StockContract.StockEntry.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                 if ( _id > 0 ) {
                     returnUri = StockContract.StockEntry.buildStockUri(_id);
                 } else {
@@ -253,7 +253,7 @@ public class StockProvider extends ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(StockContract.StockEntry.TABLE_NAME, null, value);
+                        long _id = db.insertWithOnConflict(StockContract.StockEntry.TABLE_NAME, null, value, SQLiteDatabase.CONFLICT_REPLACE);
                         if (_id != -1) {
                             returnCount++;
                         }
