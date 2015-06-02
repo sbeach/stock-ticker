@@ -97,12 +97,6 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        updateStocks();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // The CursorAdapter will take data from our cursor and populate the ListView.
