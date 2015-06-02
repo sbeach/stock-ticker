@@ -150,15 +150,15 @@ public class FetchStocksTask extends AsyncTask<String, Void, String> {
                 double open = quote.getDouble(YF_OPEN);
                 double previousClose = quote.getDouble(YF_PREVIOUS_CLOSE);
                 double change = quote.getDouble(YF_CHANGE);
-                double percentChange = quote.getDouble(YF_PERCENT_CHANGE);
+                double percentChange = Double.parseDouble(quote.getString(YF_PERCENT_CHANGE).replace("%",""));
                 double dayLow = quote.getDouble(YF_DAY_LOW);
                 double dayHigh = quote.getDouble(YF_DAY_HIGH);
                 double yearLow = quote.getDouble(YF_YEAR_LOW);
                 double yearLowChange = quote.getDouble(YF_YEAR_LOW_CHANGE);
-                double yearLowChangePercent = quote.getDouble(YF_YEAR_LOW_CHANGE_PERCENT);
+                double yearLowChangePercent = Double.parseDouble(quote.getString(YF_YEAR_LOW_CHANGE_PERCENT).replace("%", ""));
                 double yearHigh = quote.getDouble(YF_YEAR_HIGH);
                 double yearHighChange = quote.getDouble(YF_YEAR_HIGH_CHANGE);
-                double yearHighChangePercent = quote.getDouble(YF_YEAR_HIGH_CHANGE_PERCENT);
+                double yearHighChangePercent = Double.parseDouble(quote.getString(YF_YEAR_HIGH_CHANGE_PERCENT).replace("%", ""));
 
                 ContentValues stockValues = new ContentValues();
 
