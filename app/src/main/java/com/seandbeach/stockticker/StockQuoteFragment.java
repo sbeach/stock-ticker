@@ -6,6 +6,7 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -110,6 +112,19 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
         // Get a reference to the ListView, and attach this adapter to it.
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_quotes);
         listView.setAdapter(mStockAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView adapterView, View view, int position, long l) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if (cursor != null) {
+                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+                            .setData(StockContract.StockEntry.buildStockWithSymbol(cursor.getString(COL_STOCK_SYMBOL)));
+                    startActivity(intent);
+                }
+            }
+        });
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
