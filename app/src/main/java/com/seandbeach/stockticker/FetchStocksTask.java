@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import com.seandbeach.stockticker.data.StockContract.StockEntry;
@@ -25,7 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
-public class FetchStocksTask extends AsyncTask<String, Void, String> {
+public class FetchStocksTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchStocksTask.class.getSimpleName();
 
@@ -201,7 +200,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Void doInBackground(String... params) {
 
         // If there's no zip code, there's nothing to look up.  Verify size of params.
         if (params.length == 0) {
@@ -228,7 +227,6 @@ public class FetchStocksTask extends AsyncTask<String, Void, String> {
         symbols += "\"";
         String env = "store://datatables.org/alltableswithkeys";
         String callback = "";
-        String timeFetched;
 
         try {
             // Construct the URL for the Yahoo Finance query
@@ -287,7 +285,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, String> {
                 return null;
             }
             stockJsonStr = buffer.toString();
-            timeFetched = getStockDataFromJson(stockJsonStr);
+            getStockDataFromJson(stockJsonStr);
         } catch (IOException | JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -306,17 +304,6 @@ public class FetchStocksTask extends AsyncTask<String, Void, String> {
                 }
             }
         }
-        return timeFetched;
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        if (result != null && mContext instanceof Activity) {
-            View fragment = ((Activity) mContext).getFragmentManager().findFragmentById(R.id.fragment).getView();
-            if (fragment != null) {
-                TextView time = (TextView) fragment.findViewById(R.id.time);
-                if (time != null) { time.setText(result); }
-            }
-        }
+        return null;
     }
 }
