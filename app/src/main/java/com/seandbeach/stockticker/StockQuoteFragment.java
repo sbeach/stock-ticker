@@ -1,9 +1,12 @@
 package com.seandbeach.stockticker;
 
 import android.app.AlertDialog;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -11,7 +14,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -38,9 +41,10 @@ import java.util.Set;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class StockQuoteFragment extends Fragment {
+public class StockQuoteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = StockQuoteFragment.class.getSimpleName();
+    private static final int STOCK_LOADER = 0;
     private ArrayList<String> stockValues;
     private StockAdapter mStockAdapter;
 
@@ -62,16 +66,8 @@ public class StockQuoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Sort order:  Ascending, by date.
-        String sortOrder = StockContract.StockEntry.COLUMN_SYMBOL + " ASC";
-
-        Cursor cur = getActivity().getContentResolver().query(StockContract.StockEntry.CONTENT_URI,
-            null, null, null, sortOrder);
-
-        // The CursorAdapter will take data from our cursor and populate the ListView
-        // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
-        // up with an empty list the first time we run.
-        mStockAdapter = new StockAdapter(getActivity(), cur, 0);
+        // The CursorAdapter will take data from our cursor and populate the ListView.
+        mStockAdapter = new StockAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -204,6 +200,12 @@ public class StockQuoteFragment extends Fragment {
         updateStocks();
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(STOCK_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
     private void updateStocks() {
         Set<String> stocks = getSavedStocks();
 
@@ -217,5 +219,29 @@ public class StockQuoteFragment extends Fragment {
             FetchStocksTask stockTask = new FetchStocksTask(getActivity());
             stockTask.execute(stocks.toArray(new String[stocks.size()]));
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // Sort order:  Ascending, by date.
+        String sortOrder = StockContract.StockEntry.COLUMN_SYMBOL + " ASC";
+        Uri weatherForLocationUri = StockContract.StockEntry.CONTENT_URI;
+
+        return new CursorLoader(getActivity(),
+                weatherForLocationUri,
+                null,
+                null,
+                null,
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        mStockAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mStockAdapter.swapCursor(null);
     }
 }
