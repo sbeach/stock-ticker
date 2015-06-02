@@ -5,6 +5,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -59,7 +60,10 @@ public class SettingsActivity extends PreferenceActivity
             }
         } else {
             // For other preferences, set the summary to the value's simple string representation.
-            preference.setSummary(stringValue);
+            // Exclude SwitchPreferences, since those values are obvious
+            if (!(preference instanceof SwitchPreference)) {
+                preference.setSummary(stringValue);
+            }
         }
         return true;
     }
