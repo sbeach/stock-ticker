@@ -42,6 +42,7 @@ import java.util.Set;
  */
 public class StockQuoteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final String STOCK_QUOTE_FRAGMENT_TAG = "SQF_TAG";
     private static final String LOG_TAG = StockQuoteFragment.class.getSimpleName();
     private static final int STOCK_LOADER = 0;
     // For the main stock view we're showing only a small subset of the stored data.
