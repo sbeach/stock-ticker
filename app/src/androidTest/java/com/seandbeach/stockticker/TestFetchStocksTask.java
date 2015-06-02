@@ -31,7 +31,7 @@ public class TestFetchStocksTask extends AndroidTestCase{
                 StockContract.StockEntry.COLUMN_SYMBOL + " = ?",
                 new String[]{ADD_STOCK_SYMBOL});
 
-        FetchStocksTask fetchStocksTask = new FetchStocksTask(getContext(), null);
+        FetchStocksTask fetchStocksTask = new FetchStocksTask(getContext());
         long stockId = fetchStocksTask.addStock(ADD_STOCK_SYMBOL, ADD_STOCK_NAME, ADD_STOCK_PRICE, ADD_STOCK_OPEN,
                 ADD_STOCK_PREVIOUS_CLOSE, ADD_STOCK_CHANGE, ADD_STOCK_PERCENT_CHANGE,
                 ADD_STOCK_DAY_LOW, ADD_STOCK_DAY_HIGH,

@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -23,21 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.seandbeach.stockticker.data.StockContract;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,7 +42,7 @@ public class StockQuoteFragment extends Fragment {
 
     private static final String LOG_TAG = StockQuoteFragment.class.getSimpleName();
     private ArrayList<String> stockValues;
-    private ArrayAdapter<String> mStockQuoteAdapter;
+    private StockAdapter mStockAdapter;
 
     public StockQuoteFragment() {
     }
@@ -72,30 +62,22 @@ public class StockQuoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        stockValues = new ArrayList<>();
-        // The ArrayAdapter will take data from a source (like our dummy forecast) and
-        // use it to populate the ListView it's attached to.
-        mStockQuoteAdapter =
-                new ArrayAdapter<>(
-                        getActivity(), // The current context (this activity)
-                        R.layout.list_item_quote, // The name of the layout ID.
-                        R.id.list_item_quote_textview, // The ID of the textview to populate.
-                        new ArrayList<String>());
+        // Sort order:  Ascending, by date.
+        String sortOrder = StockContract.StockEntry.COLUMN_SYMBOL + " ASC";
+
+        Cursor cur = getActivity().getContentResolver().query(StockContract.StockEntry.CONTENT_URI,
+            null, null, null, sortOrder);
+
+        // The CursorAdapter will take data from our cursor and populate the ListView
+        // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
+        // up with an empty list the first time we run.
+        mStockAdapter = new StockAdapter(getActivity(), cur, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_quotes);
-        listView.setAdapter(mStockQuoteAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String quote = mStockQuoteAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, quote);
-                startActivity(intent);
-            }
-        });
+        listView.setAdapter(mStockAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
@@ -128,24 +110,25 @@ public class StockQuoteFragment extends Fragment {
 
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        ArrayList<Integer> positions = new ArrayList<>();
-
-                        for (int i = 0; i < checked.size(); i++) {
-                            if (checked.valueAt(i)) {
-                                positions.add(checked.keyAt(i));
-                            }
-                        }
-
-                        Collections.sort(positions, Collections.reverseOrder());
-
-                        Set<String> stocks = getSavedStocks();
-                        for (int position : positions) {
-                            String toRemove = stockValues.get(position);
-                            mStockQuoteAdapter.remove(toRemove);
-                            stocks.remove(toRemove.substring(toRemove.indexOf("(") + 1, toRemove.indexOf(")")));
-                        }
-
-                        saveStocks(stocks);
+                        // TODO: Implement removal from DB
+//                        ArrayList<Integer> positions = new ArrayList<>();
+//
+//                        for (int i = 0; i < checked.size(); i++) {
+//                            if (checked.valueAt(i)) {
+//                                positions.add(checked.keyAt(i));
+//                            }
+//                        }
+//
+//                        Collections.sort(positions, Collections.reverseOrder());
+//
+//                        Set<String> stocks = getSavedStocks();
+//                        for (int position : positions) {
+//                            String toRemove = stockValues.get(position);
+//                            mStockAdapter.remove(toRemove);
+//                            stocks.remove(toRemove.substring(0, toRemove.indexOf(")")));
+//                        }
+//
+//                        saveStocks(stocks);
                         listView.clearChoices();
                         break;
                     default:
@@ -231,7 +214,7 @@ public class StockQuoteFragment extends Fragment {
         if (!isMobileDataEnabled() && networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
             Toast.makeText(getActivity(), "Mobile data usage is disabled", Toast.LENGTH_SHORT).show();
         } else {
-            FetchStocksTask stockTask = new FetchStocksTask(getActivity(), mStockQuoteAdapter);
+            FetchStocksTask stockTask = new FetchStocksTask(getActivity());
             stockTask.execute(stocks.toArray(new String[stocks.size()]));
         }
     }

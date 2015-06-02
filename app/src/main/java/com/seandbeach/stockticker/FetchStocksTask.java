@@ -1,15 +1,15 @@
 package com.seandbeach.stockticker;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.text.format.Time;
 import android.util.Log;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.TextView;
 
 import com.seandbeach.stockticker.data.StockContract.StockEntry;
 
@@ -23,34 +23,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Vector;
 
-public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
+public class FetchStocksTask extends AsyncTask<String, Void, String> {
 
     private final String LOG_TAG = FetchStocksTask.class.getSimpleName();
 
-    private ArrayAdapter<String> mForecastAdapter;
     private final Context mContext;
 
-    public FetchStocksTask(Context context, ArrayAdapter<String> forecastAdapter) {
+    public FetchStocksTask(Context context) {
         mContext = context;
-        mForecastAdapter = forecastAdapter;
     }
 
     private boolean DEBUG = true;
-
-    /* The date/time conversion code is going to be moved outside the asynctask later,
-     * so for convenience we're breaking it out into its own method now.
-     */
-    private String getReadableDateString(long time){
-        // Because the API returns a unix timestamp (measured in seconds),
-        // it must be converted to milliseconds in order to be converted to valid date.
-        Date date = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat("E, MMM d");
-        return format.format(date).toString();
-    }
 
     /**
      * Helper method to handle insertion of a new location in the weather database.
@@ -114,24 +99,6 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
         return locationId;
     }
 
-    String[] convertContentValuesToUXFormat(Vector<ContentValues> cvv) {
-        // return strings to keep UI functional for now
-        String[] resultStrs = new String[cvv.size()];
-        for ( int i = 0; i < cvv.size(); i++ ) {
-            ContentValues stockValues = cvv.elementAt(i);
-            String name = stockValues.getAsString(StockEntry.COLUMN_NAME);
-            resultStrs[i] = stockValues.getAsString(StockEntry.COLUMN_SYMBOL)
-                    + (name != null && !name.isEmpty() && !name.equals("null") ? (" (" + name + "): ") : ": ")
-                    + stockValues.getAsString(StockEntry.COLUMN_LAST_TRADE_PRICE)
-                    + " ("
-                        + stockValues.getAsString(StockEntry.COLUMN_CHANGE)
-                        + ", " + stockValues.getAsString(StockEntry.COLUMN_PERCENT_CHANGE)
-                    + ")"
-            ;
-        }
-        return resultStrs;
-    }
-
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
@@ -139,7 +106,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private String[] getStockDataFromJson(String stockJsonStr, int numQuotes)
+    private String getStockDataFromJson(String stockJsonStr)
             throws JSONException {
         
         // These are the names of the JSON objects that need to be extracted.
@@ -166,7 +133,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
         try {
             JSONObject stockJson = new JSONObject(stockJsonStr);
             JSONArray quoteArray = stockJson.getJSONObject(YF_QUERY).getJSONObject(YF_RESULTS).getJSONArray(YF_QUOTE);
-            String created = stockJson.getJSONObject(YF_QUERY).getString(YF_CREATED);
+            String timeOfFetch = stockJson.getJSONObject(YF_QUERY).getString(YF_CREATED);
 
             // Insert the new stock information into the database
             Vector<ContentValues> cVVector = new Vector<>(quoteArray.length());
@@ -214,31 +181,17 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
                 cVVector.add(stockValues);
             }
 
+            int inserted = 0;
             // add to database
             if (cVVector.size() > 0) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
-                mContext.getContentResolver().bulkInsert(StockEntry.CONTENT_URI, cvArray);
+                inserted = mContext.getContentResolver().bulkInsert(StockEntry.CONTENT_URI, cvArray);
             }
 
-            // Sort order:  Ascending, by date.
-            String sortOrder = StockEntry.COLUMN_SYMBOL + " ASC";
-            Cursor cur = mContext.getContentResolver().query(StockEntry.CONTENT_URI,
-                    null, null, null, sortOrder);
+            Log.d(LOG_TAG, "FetchWeatherTask complete. " + inserted + " inserted");
 
-            cVVector = new Vector<>(cur.getCount());
-            if ( cur.moveToFirst() ) {
-                do {
-                    ContentValues cv = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cur, cv);
-                    cVVector.add(cv);
-                } while (cur.moveToNext());
-            }
-
-            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
-
-            String[] resultStrs = convertContentValuesToUXFormat(cVVector);
-            return resultStrs;
+            return timeOfFetch;
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -248,13 +201,12 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(String... params) {
+    protected String doInBackground(String... params) {
 
         // If there's no zip code, there's nothing to look up.  Verify size of params.
         if (params.length == 0) {
             return null;
         }
-        String locationQuery = params[0];
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -262,7 +214,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
         BufferedReader reader = null;
 
         // Will contain the raw JSON response as a string.
-        String stockJsonStr = null;
+        String stockJsonStr;
 
         String format = "json";
         String selectors = " * "; // Name,Change,PercentChange,DaysLow,DaysHigh,YearLow,YearHigh,Open,PreviousClose,Symbol
@@ -276,6 +228,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
         symbols += "\"";
         String env = "store://datatables.org/alltableswithkeys";
         String callback = "";
+        String timeFetched;
 
         try {
             // Construct the URL for the Yahoo Finance query
@@ -334,9 +287,11 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
                 return null;
             }
             stockJsonStr = buffer.toString();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
+            timeFetched = getStockDataFromJson(stockJsonStr);
+        } catch (IOException | JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+            // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
             return null;
         } finally {
@@ -351,25 +306,17 @@ public class FetchStocksTask extends AsyncTask<String, Void, String[]> {
                 }
             }
         }
-
-        try {
-            return getStockDataFromJson(stockJsonStr, params.length);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
-        }
-        // This will only happen if there was an error getting or parsing the forecast.
-        return null;
+        return timeFetched;
     }
 
     @Override
-    protected void onPostExecute(String[] result) {
-        if (result != null && mForecastAdapter != null) {
-            mForecastAdapter.clear();
-            for(String dayForecastStr : result) {
-                mForecastAdapter.add(dayForecastStr);
+    protected void onPostExecute(String result) {
+        if (result != null && mContext instanceof Activity) {
+            View fragment = ((Activity) mContext).getFragmentManager().findFragmentById(R.id.fragment).getView();
+            if (fragment != null) {
+                TextView time = (TextView) fragment.findViewById(R.id.time);
+                if (time != null) { time.setText(result); }
             }
-            // New data is back from the server.  Hooray!
         }
     }
 }
