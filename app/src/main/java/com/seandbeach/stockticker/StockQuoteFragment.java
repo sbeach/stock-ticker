@@ -1,11 +1,11 @@
 package com.seandbeach.stockticker;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -14,7 +14,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -24,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,7 +31,6 @@ import com.seandbeach.stockticker.data.StockContract;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,6 +42,25 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
 
     private static final String LOG_TAG = StockQuoteFragment.class.getSimpleName();
     private static final int STOCK_LOADER = 0;
+    // For the main stock view we're showing only a small subset of the stored data.
+    // Specify the columns we need.
+    private static final String[] STOCK_COLUMNS = {
+            StockContract.StockEntry._ID,
+            StockContract.StockEntry.COLUMN_SYMBOL,
+            StockContract.StockEntry.COLUMN_NAME,
+            StockContract.StockEntry.COLUMN_LAST_TRADE_PRICE,
+            StockContract.StockEntry.COLUMN_CHANGE,
+            StockContract.StockEntry.COLUMN_PERCENT_CHANGE
+    };
+
+    // These indices are tied to STOCK_COLUMNS. If STOCK_COLUMNS changes, these must change.
+    static final int COL_STOCK_ID = 0;
+    static final int COL_STOCK_SYMBOL = 1;
+    static final int COL_STOCK_NAME = 2;
+    static final int COL_STOCK_PRICE = 3;
+    static final int COL_STOCK_CHANGE = 4;
+    static final int COL_STOCK_CHANGE_PERCENT = 5;
+
     private ArrayList<String> stockValues;
     private StockAdapter mStockAdapter;
 
@@ -225,11 +241,11 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         // Sort order:  Ascending, by date.
         String sortOrder = StockContract.StockEntry.COLUMN_SYMBOL + " ASC";
-        Uri weatherForLocationUri = StockContract.StockEntry.CONTENT_URI;
+        Uri stockUri = StockContract.StockEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
-                weatherForLocationUri,
-                null,
+                stockUri,
+                STOCK_COLUMNS,
                 null,
                 null,
                 sortOrder);
