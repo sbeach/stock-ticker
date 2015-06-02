@@ -50,7 +50,17 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
             StockContract.StockEntry.COLUMN_NAME,
             StockContract.StockEntry.COLUMN_LAST_TRADE_PRICE,
             StockContract.StockEntry.COLUMN_CHANGE,
-            StockContract.StockEntry.COLUMN_CHANGE_PERCENT
+            StockContract.StockEntry.COLUMN_CHANGE_PERCENT,
+            StockContract.StockEntry.COLUMN_OPEN,
+            StockContract.StockEntry.COLUMN_PREVIOUS_CLOSE,
+            StockContract.StockEntry.COLUMN_DAY_HIGH,
+            StockContract.StockEntry.COLUMN_DAY_LOW,
+            StockContract.StockEntry.COLUMN_YEAR_LOW,
+            StockContract.StockEntry.COLUMN_YEAR_LOW_CHANGE,
+            StockContract.StockEntry.COLUMN_YEAR_LOW_CHANGE_PERCENT,
+            StockContract.StockEntry.COLUMN_YEAR_HIGH,
+            StockContract.StockEntry.COLUMN_YEAR_HIGH_CHANGE,
+            StockContract.StockEntry.COLUMN_YEAR_HIGH_CHANGE_PERCENT
     };
 
     // These indices are tied to STOCK_COLUMNS. If STOCK_COLUMNS changes, these must change.
@@ -60,6 +70,16 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     static final int COL_STOCK_PRICE = 3;
     static final int COL_STOCK_CHANGE = 4;
     static final int COL_STOCK_CHANGE_PERCENT = 5;
+    static final int COL_STOCK_OPEN = 6;
+    static final int COL_STOCK_PREVIOUS_CLOSE = 7;
+    static final int COL_STOCK_DAY_LOW = 8;
+    static final int COL_STOCK_DAY_HIGH = 9;
+    static final int COL_STOCK_YEAR_LOW = 10;
+    static final int COL_STOCK_YEAR_LOW_CHANGE = 11;
+    static final int COL_STOCK_YEAR_LOW_CHANGE_PERCENT = 12;
+    static final int COL_STOCK_YEAR_HIGH = 13;
+    static final int COL_STOCK_YEAR_HIGH_CHANGE = 14;
+    static final int COL_STOCK_YEAR_HIGH_CHANGE_PERCENT = 15;
 
     private ArrayList<String> stockValues;
     private StockAdapter mStockAdapter;
