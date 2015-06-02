@@ -32,8 +32,10 @@ public class DetailActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             mQuoteStr = intent.getStringExtra(Intent.EXTRA_TEXT);
-            ((TextView) rootView.findViewById(R.id.detail_text))
-                    .setText(mQuoteStr);
+        }
+
+        if (null != mQuoteStr) {
+            ((TextView) rootView.findViewById(R.id.detail_text)).setText(mQuoteStr);
         }
         return rootView;
     }
