@@ -53,7 +53,7 @@ public class StockContract {
         public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_LAST_TRADE_PRICE = "LastTradePriceOnly";
         public static final String COLUMN_CHANGE = "Change";
-        public static final String COLUMN_PERCENT_CHANGE = "PercentChange";
+        public static final String COLUMN_CHANGE_PERCENT = "PercentChange";
         public static final String COLUMN_OPEN = "Open";
         public static final String COLUMN_PREVIOUS_CLOSE = "PreviousClose";
         public static final String COLUMN_DAY_LOW = "DaysLow";

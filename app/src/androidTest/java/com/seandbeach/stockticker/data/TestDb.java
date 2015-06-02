@@ -67,7 +67,7 @@ public class TestDb extends AndroidTestCase {
         stockColumnHashSet.add(StockContract.StockEntry.COLUMN_OPEN);
         stockColumnHashSet.add(StockContract.StockEntry.COLUMN_PREVIOUS_CLOSE);
         stockColumnHashSet.add(StockContract.StockEntry.COLUMN_CHANGE);
-        stockColumnHashSet.add(StockContract.StockEntry.COLUMN_PERCENT_CHANGE);
+        stockColumnHashSet.add(StockContract.StockEntry.COLUMN_CHANGE_PERCENT);
         stockColumnHashSet.add(StockContract.StockEntry.COLUMN_DAY_LOW);
         stockColumnHashSet.add(StockContract.StockEntry.COLUMN_DAY_HIGH);
         stockColumnHashSet.add(StockContract.StockEntry.COLUMN_YEAR_LOW);

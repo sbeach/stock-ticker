@@ -1,6 +1,5 @@
 package com.seandbeach.stockticker;
 
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.seandbeach.stockticker.data.StockContract.StockEntry;
 
@@ -76,7 +74,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, Void> {
             stockValues.put(StockEntry.COLUMN_OPEN, open);
             stockValues.put(StockEntry.COLUMN_PREVIOUS_CLOSE, previousClose);
             stockValues.put(StockEntry.COLUMN_CHANGE, change);
-            stockValues.put(StockEntry.COLUMN_PERCENT_CHANGE, percentChange);
+            stockValues.put(StockEntry.COLUMN_CHANGE_PERCENT, percentChange);
             stockValues.put(StockEntry.COLUMN_DAY_LOW, dayLow);
             stockValues.put(StockEntry.COLUMN_DAY_HIGH, dayHigh);
             stockValues.put(StockEntry.COLUMN_YEAR_LOW, yearLow);
@@ -167,7 +165,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, Void> {
                 stockValues.put(StockEntry.COLUMN_OPEN, open);
                 stockValues.put(StockEntry.COLUMN_PREVIOUS_CLOSE, previousClose);
                 stockValues.put(StockEntry.COLUMN_CHANGE, change);
-                stockValues.put(StockEntry.COLUMN_PERCENT_CHANGE, percentChange);
+                stockValues.put(StockEntry.COLUMN_CHANGE_PERCENT, percentChange);
                 stockValues.put(StockEntry.COLUMN_DAY_LOW, dayLow);
                 stockValues.put(StockEntry.COLUMN_DAY_HIGH, dayHigh);
                 stockValues.put(StockEntry.COLUMN_YEAR_LOW, yearLow);

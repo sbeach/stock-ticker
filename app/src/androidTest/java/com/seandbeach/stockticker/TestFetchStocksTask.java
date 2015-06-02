@@ -56,7 +56,7 @@ public class TestFetchStocksTask extends AndroidTestCase{
                             StockContract.StockEntry.COLUMN_OPEN,
                             StockContract.StockEntry.COLUMN_PREVIOUS_CLOSE,
                             StockContract.StockEntry.COLUMN_CHANGE,
-                            StockContract.StockEntry.COLUMN_PERCENT_CHANGE,
+                            StockContract.StockEntry.COLUMN_CHANGE_PERCENT,
                             StockContract.StockEntry.COLUMN_DAY_LOW,
                             StockContract.StockEntry.COLUMN_DAY_HIGH,
                             StockContract.StockEntry.COLUMN_YEAR_LOW,

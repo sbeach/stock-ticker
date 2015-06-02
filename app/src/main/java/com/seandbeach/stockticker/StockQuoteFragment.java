@@ -50,7 +50,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
             StockContract.StockEntry.COLUMN_NAME,
             StockContract.StockEntry.COLUMN_LAST_TRADE_PRICE,
             StockContract.StockEntry.COLUMN_CHANGE,
-            StockContract.StockEntry.COLUMN_PERCENT_CHANGE
+            StockContract.StockEntry.COLUMN_CHANGE_PERCENT
     };
 
     // These indices are tied to STOCK_COLUMNS. If STOCK_COLUMNS changes, these must change.

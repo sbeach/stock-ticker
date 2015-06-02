@@ -35,7 +35,7 @@ public class StockDbHelper extends SQLiteOpenHelper {
                 + ", " + StockEntry.COLUMN_NAME + " TEXT NOT NULL"
                 + ", " + StockEntry.COLUMN_LAST_TRADE_PRICE + " REAL NOT NULL"
                 + ", " + StockEntry.COLUMN_CHANGE + " REAL NOT NULL "
-                + ", " + StockEntry.COLUMN_PERCENT_CHANGE + " REAL NOT NULL"
+                + ", " + StockEntry.COLUMN_CHANGE_PERCENT + " REAL NOT NULL"
                 + ", " + StockEntry.COLUMN_OPEN + " REAL NOT NULL"
                 + ", " + StockEntry.COLUMN_PREVIOUS_CLOSE + " REAL NOT NULL"
                 + ", " + StockEntry.COLUMN_DAY_LOW + " REAL NOT NULL"

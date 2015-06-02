@@ -48,7 +48,7 @@ public class TestUtilities extends AndroidTestCase {
         stockValues.put(StockContract.StockEntry.COLUMN_OPEN, 537.04);
         stockValues.put(StockContract.StockEntry.COLUMN_PREVIOUS_CLOSE, 539.78);
         stockValues.put(StockContract.StockEntry.COLUMN_CHANGE, -1.42);
-        stockValues.put(StockContract.StockEntry.COLUMN_PERCENT_CHANGE, 0.07);
+        stockValues.put(StockContract.StockEntry.COLUMN_CHANGE_PERCENT, 0.07);
         stockValues.put(StockContract.StockEntry.COLUMN_DAY_LOW, 531.45);
         stockValues.put(StockContract.StockEntry.COLUMN_DAY_HIGH, 538.63);
         stockValues.put(StockContract.StockEntry.COLUMN_YEAR_LOW, 486.23);
