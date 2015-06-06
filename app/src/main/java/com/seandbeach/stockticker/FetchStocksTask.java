@@ -125,6 +125,7 @@ public class FetchStocksTask extends AsyncTask<String, Void, Void> {
         final String YF_YEAR_LOW_CHANGE_PERCENT = "PercentChangeFromYearLow";
         final String YF_YEAR_HIGH = "YearHigh";
         final String YF_YEAR_HIGH_CHANGE = "ChangeFromYearHigh";
+        // Yes, this is spelled incorrectly; it is a typo in the Yahoo DB
         final String YF_YEAR_HIGH_CHANGE_PERCENT = "PercebtChangeFromYearHigh";
 
         try {
