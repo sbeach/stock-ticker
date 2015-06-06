@@ -241,7 +241,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
 
     private void addNewStock(String newStock) {
         Set<String> stocks = getSavedStocks();
-        stocks.add(newStock);
+        stocks.add(newStock.toUpperCase());
         saveStocks(stocks);
         updateStocks();
     }
