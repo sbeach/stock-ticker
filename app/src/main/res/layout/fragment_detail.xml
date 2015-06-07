@@ -88,8 +88,6 @@
 
                 <TextView
                     android:id="@+id/detail_change_percent"
-                    android:paddingRight="4dp"
-                    android:paddingEnd="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -201,8 +199,6 @@
 
                 <TextView
                     android:id="@+id/detail_year_low_change_percent"
-                    android:paddingRight="4dp"
-                    android:paddingEnd="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -256,8 +252,6 @@
 
                 <TextView
                     android:id="@+id/detail_year_high_change_percent"
-                    android:paddingRight="4dp"
-                    android:paddingEnd="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
