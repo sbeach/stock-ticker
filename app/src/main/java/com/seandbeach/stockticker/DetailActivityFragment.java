@@ -8,6 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.seandbeach.stockticker.data.StockContract;
+import java.text.DecimalFormat;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -126,9 +127,14 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        if (!cursor.moveToFirst()) { return; }
+        if (cursor != null && cursor.moveToFirst()) {
 
-        String name = cursor.getString(StockQuoteFragment.COL_STOCK_NAME);
+            String name = cursor.getString(StockQuoteFragment.COL_STOCK_NAME);
+            if (name != null && !name.isEmpty() && !name.equals("null")) {
+                mNameView.setText(name);
+            } else {
+                mNameView.setVisibility(View.GONE);
+            }
 
         mQuoteStr = cursor.getString(StockQuoteFragment.COL_STOCK_SYMBOL)
                 + (name != null && !name.isEmpty() && !name.equals("null") ? (" (" + name + "): ") : ": ")
@@ -137,13 +143,73 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                     + cursor.getDouble(StockQuoteFragment.COL_STOCK_CHANGE)
                     + ", " + cursor.getDouble(StockQuoteFragment.COL_STOCK_CHANGE_PERCENT) + "%"
                 + ")";
+            String symbol = cursor.getString(StockQuoteFragment.COL_STOCK_SYMBOL);
+//            if (getActivity().getActionBar() != null) {
+//                getActivity().getActionBar().setTitle(symbol);
+//                mSymbolView.setVisibility(View.GONE);
+//            } else if (getActivity() instanceof AppCompatActivity
+//                    && ((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
+//                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(symbol);
+//                mSymbolView.setVisibility(View.GONE);
+//            } else {
+//                mSymbolView.setText(symbol);
+//            }
+            mSymbolView.setText(symbol);
 
-        TextView detailTextView = (TextView)getView().findViewById(R.id.detail_text);
-        detailTextView.setText(mQuoteStr);
+            String pricePattern = "\u00A4#,##0.00";
+            String changePattern = "#,##0.00";
+            String changePercentPattern = "#,##0.00%";
 
-        // If onCreateOptionsMenu has already happened, we need to update the share intent now.
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(createShareQuoteIntent());
+            DecimalFormat fmt = new DecimalFormat(pricePattern);
+
+            double price = cursor.getDouble(StockQuoteFragment.COL_STOCK_PRICE);
+            mPriceView.setText(fmt.format(price));
+
+            double previousClose = cursor.getDouble(StockQuoteFragment.COL_STOCK_PREVIOUS_CLOSE);
+            mPreviousCloseView.setText(fmt.format(previousClose));
+
+            double open = cursor.getDouble(StockQuoteFragment.COL_STOCK_OPEN);
+            mOpenView.setText(fmt.format(open));
+
+            double low = cursor.getDouble(StockQuoteFragment.COL_STOCK_DAY_LOW);
+            mDayLowView.setText(fmt.format(low));
+
+            double high = cursor.getDouble(StockQuoteFragment.COL_STOCK_DAY_HIGH);
+            mDayHighView.setText(fmt.format(high));
+
+            double yearLow = cursor.getDouble(StockQuoteFragment.COL_STOCK_YEAR_LOW);
+            mYearLowView.setText(fmt.format(yearLow));
+
+            double yearHigh = cursor.getDouble(StockQuoteFragment.COL_STOCK_YEAR_HIGH);
+            mYearHighView.setText(fmt.format(yearHigh));
+
+            fmt.applyPattern(changePattern);
+
+            double change = cursor.getDouble(StockQuoteFragment.COL_STOCK_CHANGE);
+            mChangeView.setText(fmt.format(change));
+
+            double yearLowChange = cursor.getDouble(StockQuoteFragment.COL_STOCK_YEAR_LOW_CHANGE);
+            mYearLowChangeView.setText(fmt.format(yearLowChange));
+
+            double yearHighChange = cursor.getDouble(StockQuoteFragment.COL_STOCK_YEAR_HIGH_CHANGE);
+            mYearHighChangeView.setText(fmt.format(yearHighChange));
+
+            fmt.applyPattern(changePercentPattern);
+
+            double quoteChangePercent = cursor.getDouble(StockQuoteFragment.COL_STOCK_CHANGE_PERCENT);
+            mChangePercentView.setText("(" + fmt.format(quoteChangePercent / 100) + ")");
+
+            double yearLowChangePercent = cursor.getDouble(StockQuoteFragment.COL_STOCK_YEAR_LOW_CHANGE_PERCENT);
+            mYearLowChangePercentView.setText("(" + fmt.format(yearLowChangePercent / 100) + ")");
+
+            double yearHighChangePercent = cursor.getDouble(StockQuoteFragment.COL_STOCK_YEAR_HIGH_CHANGE_PERCENT);
+            mYearHighChangePercentView.setText("(" + fmt.format(yearHighChangePercent / 100) + ")");
+
+
+            // If onCreateOptionsMenu has already happened, we need to update the share intent now.
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(createShareQuoteIntent());
+            }
         }
     }
 
