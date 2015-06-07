@@ -25,6 +25,9 @@ import com.seandbeach.stockticker.data.StockContract;
  */
 public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final String YAHOO_FINANCE_URL_BASE = "http://finance.yahoo.com/q?s=";
+    public static final String GOOGLE_PLAY_BITLINK = "http://bit.ly/1GtB1Ns";
+
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private static final int DETAIL_LOADER = 0;
     private String mQuoteStr;
