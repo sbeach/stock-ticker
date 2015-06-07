@@ -33,6 +33,22 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private String mQuoteStr;
     private ShareActionProvider mShareActionProvider;
 
+    private TextView mSymbolView;
+    private TextView mNameView;
+    private TextView mPriceView;
+    private TextView mChangeView;
+    private TextView mChangePercentView;
+    private TextView mOpenView;
+    private TextView mPreviousCloseView;
+    private TextView mDayLowView;
+    private TextView mDayHighView;
+    private TextView mYearLowView;
+    private TextView mYearLowChangeView;
+    private TextView mYearLowChangePercentView;
+    private TextView mYearHighView;
+    private TextView mYearHighChangeView;
+    private TextView mYearHighChangePercentView;
+
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
     }
@@ -40,15 +56,22 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Intent intent = getActivity().getIntent();
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        if (intent != null) {
-            mQuoteStr = intent.getDataString();
-        }
-
-        if (null != mQuoteStr) {
-            ((TextView) rootView.findViewById(R.id.detail_text)).setText(mQuoteStr);
-        }
+        mSymbolView = (TextView) rootView.findViewById(R.id.detail_symbol);
+        mNameView = (TextView) rootView.findViewById(R.id.detail_name);
+        mPriceView = (TextView) rootView.findViewById(R.id.detail_price);
+        mChangeView = (TextView) rootView.findViewById(R.id.detail_change);
+        mChangePercentView = (TextView) rootView.findViewById(R.id.detail_change_percent);
+        mOpenView = (TextView) rootView.findViewById(R.id.detail_open);
+        mPreviousCloseView = (TextView) rootView.findViewById(R.id.detail_previous_close);
+        mDayLowView = (TextView) rootView.findViewById(R.id.detail_day_low);
+        mDayHighView = (TextView) rootView.findViewById(R.id.detail_day_high);
+        mYearLowView = (TextView) rootView.findViewById(R.id.detail_year_low);
+        mYearLowChangeView = (TextView) rootView.findViewById(R.id.detail_year_low_change);
+        mYearLowChangePercentView = (TextView) rootView.findViewById(R.id.detail_year_low_change_percent);
+        mYearHighView = (TextView) rootView.findViewById(R.id.detail_year_high);
+        mYearHighChangeView = (TextView) rootView.findViewById(R.id.detail_year_high_change);
+        mYearHighChangePercentView = (TextView) rootView.findViewById(R.id.detail_year_high_change_percent);
         return rootView;
     }
 
