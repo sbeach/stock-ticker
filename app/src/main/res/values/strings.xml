@@ -12,6 +12,17 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
 
+    <string name="price">Last Trade Price</string>
+    <string name="open">Opening Price</string>
+    <string name="previous_close">Previous Close</string>
+    <string name="change">Change</string>
+    <string name="day_low">Daily Low</string>
+    <string name="day_high">Daily High</string>
+    <string name="year_low">Year Low</string>
+    <string name="year_low_change">Change from Year Low</string>
+    <string name="year_high">Year High</string>
+    <string name="year_high_change">Change from Year High</string>
+
     <string name="pref_mobile_data">Sync over mobile networks</string>
     <string name="pref_mobile_data_key">mobile_data</string>
     <string name="pref_stocks_displayed_key">stocks_displayed</string>
