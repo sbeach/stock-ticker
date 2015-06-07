@@ -59,7 +59,8 @@
                 android:id="@+id/list_item_quote_change"
                 android:text="-3.21"
                 android:gravity="end"
-                android:padding="2dp"
+                android:paddingRight="4dp"
+                android:paddingEnd="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -67,7 +68,6 @@
                 android:id="@+id/list_item_quote_change_percent"
                 android:text="(-0.67%)"
                 android:gravity="end"
-                android:padding="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
