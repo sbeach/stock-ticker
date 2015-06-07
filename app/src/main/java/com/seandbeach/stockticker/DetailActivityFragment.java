@@ -199,6 +199,28 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             mYearHighChangePercentView.setText("(" + fmt.format(yearHighChangePercent / 100) + ")");
 
 
+            if (change >= 0) {
+                mChangeView.setTextColor(getResources().getColor(R.color.stock_change_positive));
+                mChangePercentView.setTextColor(getResources().getColor(R.color.stock_change_positive));
+            } else {
+                mChangeView.setTextColor(getResources().getColor(R.color.stock_change_negative));
+                mChangePercentView.setTextColor(getResources().getColor(R.color.stock_change_negative));
+            }
+            if (yearLowChange >= 0) {
+                mYearLowChangeView.setTextColor(getResources().getColor(R.color.stock_change_positive));
+                mYearLowChangePercentView.setTextColor(getResources().getColor(R.color.stock_change_positive));
+            } else {
+                mYearLowChangeView.setTextColor(getResources().getColor(R.color.stock_change_negative));
+                mYearLowChangePercentView.setTextColor(getResources().getColor(R.color.stock_change_negative));
+            }
+            if (yearHighChange >= 0) {
+                mYearHighChangeView.setTextColor(getResources().getColor(R.color.stock_change_positive));
+                mYearHighChangePercentView.setTextColor(getResources().getColor(R.color.stock_change_positive));
+            } else {
+                mYearHighChangeView.setTextColor(getResources().getColor(R.color.stock_change_negative));
+                mYearHighChangePercentView.setTextColor(getResources().getColor(R.color.stock_change_negative));
+            }
+
             fmt.applyPattern(changePattern);
             mShareString = symbol + " stock"
                     + (change > 0 ? " up " : " down ")

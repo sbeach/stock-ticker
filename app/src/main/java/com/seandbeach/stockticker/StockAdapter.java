@@ -69,5 +69,13 @@ public class StockAdapter extends CursorAdapter {
         fmt.applyPattern(changePercentPattern);
         double quoteChangePercent = cursor.getDouble(StockQuoteFragment.COL_STOCK_CHANGE_PERCENT);
         holder.changePercentView.setText("(" + fmt.format(quoteChangePercent / 100) + ")");
+
+        if (quoteChange >= 0) {
+            holder.changeView.setTextColor(context.getResources().getColor(R.color.stock_change_positive));
+            holder.changePercentView.setTextColor(context.getResources().getColor(R.color.stock_change_positive));
+        } else {
+            holder.changeView.setTextColor(context.getResources().getColor(R.color.stock_change_negative));
+            holder.changePercentView.setTextColor(context.getResources().getColor(R.color.stock_change_negative));
+        }
     }
 }
