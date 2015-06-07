@@ -31,7 +31,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private static final int DETAIL_LOADER = 0;
-    private String mQuoteStr;
+    private String mShareString;
     private ShareActionProvider mShareActionProvider;
 
     private TextView mSymbolView;
@@ -89,7 +89,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         // Attach an intent to this ShareActionProvider.  You can update this at any time,
         // like when the user selects a new piece of data they might like to share.
-        if (mQuoteStr != null) {
+        if (mShareString != null) {
             mShareActionProvider.setShareIntent(createShareQuoteIntent());
         } else {
             Log.d(LOG_TAG, "Share Action Provider is null?");
@@ -100,7 +100,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mQuoteStr);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mShareString);
         return shareIntent;
     }
 
@@ -136,13 +136,6 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                 mNameView.setVisibility(View.GONE);
             }
 
-        mQuoteStr = cursor.getString(StockQuoteFragment.COL_STOCK_SYMBOL)
-                + (name != null && !name.isEmpty() && !name.equals("null") ? (" (" + name + "): ") : ": ")
-                + cursor.getDouble(StockQuoteFragment.COL_STOCK_PRICE)
-                + " ("
-                    + cursor.getDouble(StockQuoteFragment.COL_STOCK_CHANGE)
-                    + ", " + cursor.getDouble(StockQuoteFragment.COL_STOCK_CHANGE_PERCENT) + "%"
-                + ")";
             String symbol = cursor.getString(StockQuoteFragment.COL_STOCK_SYMBOL);
 //            if (getActivity().getActionBar() != null) {
 //                getActivity().getActionBar().setTitle(symbol);
@@ -205,6 +198,13 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             double yearHighChangePercent = cursor.getDouble(StockQuoteFragment.COL_STOCK_YEAR_HIGH_CHANGE_PERCENT);
             mYearHighChangePercentView.setText("(" + fmt.format(yearHighChangePercent / 100) + ")");
 
+
+            fmt.applyPattern(changePattern);
+            mShareString = symbol + " stock"
+                    + (change > 0 ? " up " : " down ")
+                    + fmt.format(Math.abs(change)) + "\n"
+                    + YAHOO_FINANCE_URL_BASE + symbol
+            + "\n\nGet Stock Ticker for Android:\n" + GOOGLE_PLAY_BITLINK;
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mShareActionProvider != null) {
