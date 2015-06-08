@@ -228,12 +228,13 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                 mYearHighChangePercentView.setTextColor(getResources().getColor(R.color.stock_change_negative));
             }
 
-            fmt.applyPattern(changePattern);
+            fmt.applyPattern(pricePattern);
             mShareString = symbol + " stock"
-                    + (change > 0 ? " up " : " down ")
-                    + fmt.format(Math.abs(change)) + "\n"
+                    + (change > 0 ? " rises " : " falls ")
+                    + fmt.format(Math.abs(change))
+                    + "; now " + fmt.format(price) + "\n"
                     + YAHOO_FINANCE_URL_BASE + symbol
-            + "\n\nGet Stock Ticker for Android:\n" + GOOGLE_PLAY_BITLINK;
+            + "\nGet Stock Ticker for Android:\n" + GOOGLE_PLAY_BITLINK;
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mShareActionProvider != null) {
