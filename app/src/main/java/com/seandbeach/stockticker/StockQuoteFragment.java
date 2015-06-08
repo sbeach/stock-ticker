@@ -6,7 +6,6 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -126,9 +125,9 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-                            .setData(StockContract.StockEntry.buildStockWithSymbol(cursor.getString(COL_STOCK_SYMBOL)));
-                    startActivity(intent);
+                    ((Callback) getActivity())
+                            .onItemSelected(StockContract.StockEntry
+                                    .buildStockWithSymbol(cursor.getString(COL_STOCK_SYMBOL)));
                 }
             }
         });

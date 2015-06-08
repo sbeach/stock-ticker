@@ -2,13 +2,13 @@ package com.seandbeach.stockticker;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +31,10 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     private static final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private static final int DETAIL_LOADER = 0;
+    static final String DETAIL_URI = "URI";
     private String mShareString;
     private ShareActionProvider mShareActionProvider;
+    private Uri mUri;
 
     private TextView mSymbolView;
     private TextView mNameView;
@@ -57,6 +59,12 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DETAIL_URI);
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mSymbolView = (TextView) rootView.findViewById(R.id.detail_symbol);
         mNameView = (TextView) rootView.findViewById(R.id.detail_name);
@@ -112,17 +120,16 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Intent intent = getActivity().getIntent();
-        if (intent == null || intent.getData() == null) {
-            return null;
+        if (mUri != null) {
+            return new CursorLoader(getActivity(),
+                    mUri,
+                    StockQuoteFragment.STOCK_COLUMNS,
+                    mUri.getQuery(),
+                    null,
+                    null);
         }
 
-        return new CursorLoader(getActivity(),
-                intent.getData(),
-                StockQuoteFragment.STOCK_COLUMNS,
-                intent.getData().getQuery(),
-                null,
-                null);
+        return null;
     }
 
     @Override
