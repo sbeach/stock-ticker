@@ -53,7 +53,11 @@ public class StockAdapter extends CursorAdapter {
         holder.symbolView.setText(stockSymbol);
 
         String stockName = cursor.getString(StockQuoteFragment.COL_STOCK_NAME);
-        holder.nameView.setText(stockName);;
+        if (stockName != null && !stockName.isEmpty() && !stockName.equals("null")) {
+            holder.nameView.setText(stockName);
+        } else {
+            holder.nameView.setVisibility(View.GONE);
+        }
 
         String pricePattern = "\u00A4#,##0.00";
         DecimalFormat fmt = new DecimalFormat(pricePattern);
