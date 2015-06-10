@@ -151,15 +151,15 @@ public class StockProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
-            // "stock/*"
+            // "stock?Symbol="
             case STOCK_WITH_SYMBOL:
                 retCursor = getStockBySymbol(uri, projection, sortOrder);
                 break;
-            // "stock/*"
+            // "stock?Name="
             case STOCK_WITH_NAME:
                 retCursor = getStockByName(uri, projection, sortOrder);
                 break;
-            // "stock/#"
+            // "stock?Price=#"
             case STOCK_WITH_PRICE:
                 retCursor = getStockByPrice(uri, projection, sortOrder);
                 break;
