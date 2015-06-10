@@ -43,6 +43,8 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
 
     public static final String STOCK_QUOTE_FRAGMENT_TAG = "SQF_TAG";
     private static final String LOG_TAG = StockQuoteFragment.class.getSimpleName();
+    private static final String SELECTED_KEY = "selected_position";
+
     private static final int STOCK_LOADER = 0;
     // For the main stock view we're showing only a small subset of the stored data.
     // Specify the columns we need.
@@ -83,8 +85,9 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     static final int COL_STOCK_YEAR_HIGH_CHANGE = 14;
     static final int COL_STOCK_YEAR_HIGH_CHANGE_PERCENT = 15;
 
-    private ArrayList<String> stockValues;
     private StockAdapter mStockAdapter;
+    private ListView mListView;
+    private int mPosition = ListView.INVALID_POSITION;
 
     public StockQuoteFragment() {
     }
@@ -98,7 +101,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(Uri dateUri);
+        void onItemSelected(Uri dateUri);
     }
 
     @Override
@@ -116,9 +119,9 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        final ListView listView = (ListView) rootView.findViewById(R.id.listview_quotes);
-        listView.setAdapter(mStockAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView = (ListView) rootView.findViewById(R.id.listview_quotes);
+        mListView.setAdapter(mStockAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
@@ -129,10 +132,15 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
                             .onItemSelected(StockContract.StockEntry
                                     .buildStockWithSymbol(cursor.getString(COL_STOCK_SYMBOL)));
                 }
+                mPosition = position;
             }
         });
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
             ArrayList<Integer> stocksToRemove = new ArrayList<>();
 
@@ -159,7 +167,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                SparseBooleanArray checked = listView.getCheckedItemPositions();
+                SparseBooleanArray checked = mListView.getCheckedItemPositions();
 
                 switch (item.getItemId()) {
                     case R.id.action_delete:
@@ -182,7 +190,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
 //                        }
 //
 //                        saveStocks(stocks);
-                        listView.clearChoices();
+                        mListView.clearChoices();
                         break;
                     default:
                         break;
@@ -199,6 +207,14 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -295,6 +311,9 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mStockAdapter.swapCursor(cursor);
+        if (mPosition != ListView.INVALID_POSITION) {
+            mListView.smoothScrollToPosition(mPosition);
+        }
     }
 
     @Override
