@@ -21,6 +21,7 @@
             android:id="@+id/list_item_stock_symbol"
             android:gravity="start"
             android:padding="2dp"
+            android:textAppearance="?android:textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -44,6 +45,7 @@
             android:id="@+id/list_item_quote_price"
             android:gravity="end"
             android:padding="2dp"
+            android:textAppearance="?android:textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
