@@ -6,4 +6,8 @@
     <color name="gray">#BDBDBD</color>
     <color name="light_blue">#64B5F6</color>
 
+    <color name="stock_ticker_green">#2E7D32</color>
+    <color name="stock_ticker_green_dark">#1B5E20</color>
+    <color name="stock_ticker_green_action_mode">#43A047</color>
+
 </resources>
