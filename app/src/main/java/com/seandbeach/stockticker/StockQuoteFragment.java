@@ -48,7 +48,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     private static final int STOCK_LOADER = 0;
     // For the main stock view we're showing only a small subset of the stored data.
     // Specify the columns we need.
-    static final String[] STOCK_COLUMNS = {
+    public static final String[] STOCK_COLUMNS = {
             StockContract.StockEntry._ID,
             StockContract.StockEntry.COLUMN_SYMBOL,
             StockContract.StockEntry.COLUMN_NAME,
@@ -68,22 +68,22 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     };
 
     // These indices are tied to STOCK_COLUMNS. If STOCK_COLUMNS changes, these must change.
-    static final int COL_STOCK_ID = 0;
-    static final int COL_STOCK_SYMBOL = 1;
-    static final int COL_STOCK_NAME = 2;
-    static final int COL_STOCK_PRICE = 3;
-    static final int COL_STOCK_CHANGE = 4;
-    static final int COL_STOCK_CHANGE_PERCENT = 5;
-    static final int COL_STOCK_OPEN = 6;
-    static final int COL_STOCK_PREVIOUS_CLOSE = 7;
-    static final int COL_STOCK_DAY_LOW = 8;
-    static final int COL_STOCK_DAY_HIGH = 9;
-    static final int COL_STOCK_YEAR_LOW = 10;
-    static final int COL_STOCK_YEAR_LOW_CHANGE = 11;
-    static final int COL_STOCK_YEAR_LOW_CHANGE_PERCENT = 12;
-    static final int COL_STOCK_YEAR_HIGH = 13;
-    static final int COL_STOCK_YEAR_HIGH_CHANGE = 14;
-    static final int COL_STOCK_YEAR_HIGH_CHANGE_PERCENT = 15;
+    public static final int COL_STOCK_ID = 0;
+    public static final int COL_STOCK_SYMBOL = 1;
+    public static final int COL_STOCK_NAME = 2;
+    public static final int COL_STOCK_PRICE = 3;
+    public static final int COL_STOCK_CHANGE = 4;
+    public static final int COL_STOCK_CHANGE_PERCENT = 5;
+    public static final int COL_STOCK_OPEN = 6;
+    public static final int COL_STOCK_PREVIOUS_CLOSE = 7;
+    public static final int COL_STOCK_DAY_LOW = 8;
+    public static final int COL_STOCK_DAY_HIGH = 9;
+    public static final int COL_STOCK_YEAR_LOW = 10;
+    public static final int COL_STOCK_YEAR_LOW_CHANGE = 11;
+    public static final int COL_STOCK_YEAR_LOW_CHANGE_PERCENT = 12;
+    public static final int COL_STOCK_YEAR_HIGH = 13;
+    public static final int COL_STOCK_YEAR_HIGH_CHANGE = 14;
+    public static final int COL_STOCK_YEAR_HIGH_CHANGE_PERCENT = 15;
 
     private StockAdapter mStockAdapter;
     private ListView mListView;
