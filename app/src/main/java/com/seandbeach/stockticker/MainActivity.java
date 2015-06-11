@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.seandbeach.stockticker.sync.StockTickerSyncAdapter;
+
 
 public class MainActivity extends AppCompatActivity implements StockQuoteFragment.Callback{
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements StockQuoteFragmen
         } else {
             mTwoPane = false;
         }
+
+        StockTickerSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override
