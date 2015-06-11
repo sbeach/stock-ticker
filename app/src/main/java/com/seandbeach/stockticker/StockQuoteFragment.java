@@ -237,7 +237,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
                             public void onClick(DialogInterface dialog, int id) {
                                 // User clicked OK, so save the mSelectedItems results somewhere
                                 // or return them to the component that opened the dialog
-                                addNewStock(symbolInput.getText().toString());
+                                addNewStock(symbolInput.getText().toString().toUpperCase());
                             }
                         })
                         .setNegativeButton(R.string.cancel, null);
