@@ -27,4 +27,8 @@
     <string name="pref_mobile_data_key">mobile_data</string>
     <string name="pref_stocks_displayed_key">stocks_displayed</string>
 
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">seandbeach.com</string>
+    <string name="content_authority">com.seandbeach.stockticker</string>
+
 </resources>
