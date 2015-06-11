@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.seandbeach.stockticker.data.StockContract;
+import com.seandbeach.stockticker.sync.StockTickerSyncAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -280,8 +281,6 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void updateStocks() {
-        Set<String> stocks = getSavedStocks();
-
         ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -289,8 +288,7 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
         if (!isMobileDataEnabled() && networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
             Toast.makeText(getActivity(), "Mobile data usage is disabled", Toast.LENGTH_SHORT).show();
         } else {
-            FetchStocksTask stockTask = new FetchStocksTask(getActivity());
-            stockTask.execute(stocks.toArray(new String[stocks.size()]));
+            StockTickerSyncAdapter.syncImmediately(getActivity());
         }
     }
 
