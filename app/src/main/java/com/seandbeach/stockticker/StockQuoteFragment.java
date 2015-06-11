@@ -3,6 +3,7 @@ package com.seandbeach.stockticker;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -249,28 +250,36 @@ public class StockQuoteFragment extends Fragment implements LoaderManager.Loader
         }
     }
 
-    private Set<String> getSavedStocks() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String[] defaultStockArray = getResources().getStringArray(R.array.pref_stocks_displayed_default);
-        HashSet<String> defaultStocks = new HashSet<>(Arrays.asList(defaultStockArray));
-        Set<String> saved = prefs.getStringSet(getString(R.string.pref_stocks_displayed_key), defaultStocks);
-        return saved;
-    }
-
-    private void saveStocks(Set<String> stocks) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        prefs.edit().putStringSet(getString(R.string.pref_stocks_displayed_key), stocks).apply();
-    }
-
     private boolean isMobileDataEnabled() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return prefs.getBoolean(getString(R.string.pref_mobile_data_key), false);
     }
 
     private void addNewStock(String newStock) {
-        Set<String> stocks = getSavedStocks();
-        stocks.add(newStock.toUpperCase());
-        saveStocks(stocks);
+        double placeholder = 0.00;
+
+        ContentValues stockValues = new ContentValues();
+
+        // Since the data will be fetched immediately after this method,
+        // we can simply insert placeholder data. It will be overwritten on sync.
+        stockValues.put(StockContract.StockEntry.COLUMN_SYMBOL, newStock);
+        stockValues.put(StockContract.StockEntry.COLUMN_NAME, "");
+        stockValues.put(StockContract.StockEntry.COLUMN_LAST_TRADE_PRICE, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_OPEN, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_PREVIOUS_CLOSE, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_CHANGE, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_CHANGE_PERCENT, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_DAY_LOW, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_DAY_HIGH, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_YEAR_LOW, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_YEAR_LOW_CHANGE, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_YEAR_LOW_CHANGE_PERCENT, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_YEAR_HIGH, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_YEAR_HIGH_CHANGE, placeholder);
+        stockValues.put(StockContract.StockEntry.COLUMN_YEAR_HIGH_CHANGE_PERCENT, placeholder);
+
+        getActivity().getContentResolver().insert(StockContract.StockEntry.CONTENT_URI, stockValues);
+
         updateStocks();
     }
 
