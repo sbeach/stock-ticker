@@ -137,24 +137,16 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         if (cursor != null && cursor.moveToFirst()) {
 
             String name = cursor.getString(StockQuoteFragment.COL_STOCK_NAME);
+            String symbol = cursor.getString(StockQuoteFragment.COL_STOCK_SYMBOL);
+
             if (name != null && !name.isEmpty() && !name.equals("null")) {
-                mNameView.setText(name);
+                mSymbolView.setText(name);
             } else {
-                mNameView.setVisibility(View.GONE);
+                mSymbolView.setVisibility(View.GONE);
             }
 
-            String symbol = cursor.getString(StockQuoteFragment.COL_STOCK_SYMBOL);
-//            if (getActivity().getActionBar() != null) {
-//                getActivity().getActionBar().setTitle(symbol);
-//                mSymbolView.setVisibility(View.GONE);
-//            } else if (getActivity() instanceof AppCompatActivity
-//                    && ((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
-//                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(symbol);
-//                mSymbolView.setVisibility(View.GONE);
-//            } else {
-//                mSymbolView.setText(symbol);
-//            }
-            mSymbolView.setText(symbol);
+            getActivity().setTitle(symbol);
+            mNameView.setVisibility(View.GONE);
 
             String pricePattern = "\u00A4#,##0.00";
             String changePattern = "#,##0.00";
