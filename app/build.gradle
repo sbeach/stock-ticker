@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "24 rc2"
