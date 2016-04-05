@@ -41,6 +41,9 @@
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seandbeach.stockticker.MainActivity"/>
         </activity>
 
         <provider
